@@ -35,18 +35,17 @@
 
 const hre = require("hardhat");
 
-const Election = artifacts.require("./Election.sol");
-
 async function main() {
   // Deploy the Election contract
-  const election = await deployer.deploy(Election);
+  const Election = await hre.ethers.getContractFactory("Election");
+  const election = await Election.deploy();
+
+  // Wait for the contract to be mined
+  await election.deployed();
+  // await election.deployTransaction.wait();
 
   // Get the address of the deployed contract
   const electionAddress = election.address;
-
-  // Save the address of the deployed contract to a file
-  const path = `./deployments/election.address`;
-  await hre.writeFile(path, electionAddress);
 
   // Log the address of the deployed contract to the console
   console.log(`Election contract deployed to address: ${electionAddress}`);
