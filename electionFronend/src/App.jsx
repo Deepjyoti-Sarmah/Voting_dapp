@@ -6,16 +6,27 @@ import AddCandidate from "./components/AddCandidate";
 import Voting from './components/Voting';
 
 import { ConnectButton } from "@rainbow-me/rainbowkit";
-import { useAccount} from 'wagmi';
+import { useAccount, useContract} from 'wagmi';
 
 import { CONTRACT_ADDRESS, CONTRACT_ABI } from './CONTRACT';
 
 function App() {
 
-  const [screen, setScreen] = useState('home');
-  const {address} = useAccount();
+	const [screen, setScreen] = useState('home');
+	const {address} = useAccount();
 
-  const RenderScreen = () => {
+	// const { data: signer } = useWalletClient();
+	const contract = useContract({
+		address: CONTRACT_ADDRESS,
+		abi: CONTRACT_ABI,
+		signerOrProvider: signer
+	});
+
+	console.log(contract)
+
+
+
+	const RenderScreen = () => {
 		return (
 			<div className="flex flex-col gap-4 items-center justify-center min-h-screen">
 				{
@@ -44,9 +55,9 @@ function App() {
 							address ? (
 								<div className="flex flex-row gap-4 items-center justify-center">
 									<button 
-                  onClick={() => setScreen('addCandidate')} className="bg-blue-500 text-white px-4 py-2 rounded-lg">Add Candidate</button>
+                onClick={() => setScreen('addCandidate')} className="bg-blue-500 text-white px-4 py-2 rounded-lg">Add Candidate</button>
 									<button
-                  onClick={() => setScreen('vote')} className="bg-blue-500 text-white px-4 py-2 rounded-lg">Vote</button>
+                onClick={() => setScreen('vote')} className="bg-blue-500 text-white px-4 py-2 rounded-lg">Vote</button>
 								</div>
 							) : (
 								<ConnectButton />
